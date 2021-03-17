@@ -1,13 +1,18 @@
 template <typename T>
-class miniauto_ptr
+class miniunique_ptr
 {
 public:
     // 构造函数
-    explicit miniauto_ptr(T *p = nullptr) : pointer(p){};
+    explicit miniunique_ptr(T *p = nullptr) : pointer(p) {}
+
+    // 禁用左值构造
     template <typename U>
-    miniauto_ptr(miniauto_ptr<U> &p) : pointer(p.release()) {}
+    miniunique_ptr(miniunique_ptr<U> &) = delete;
+    // 允许右值构造
+    template <typename U>
+    miniunique_ptr(miniunique_ptr<U> &&p) : pointer(p.release()) {}
     // 析构函数
-    ~miniauto_ptr()
+    ~miniunique_ptr()
     {
         delete pointer;
     }
@@ -41,10 +46,14 @@ public:
             pointer = p;
         }
     }
+    // 禁止左值赋值
+    template <typename U>
+    miniunique_ptr<T> &operator=(miniunique_ptr<U> &rp) = delete;
+    // 允许右值赋值
     // 重写赋值操作符，这里是于unique_ptr不同的地方,额外再加入一个U是为了增加弹性
     // 等于操作符会释放右操作数到左操作数
     template <typename U>
-    miniauto_ptr<T> &operator=(miniauto_ptr<U> &rp)
+    miniunique_ptr<T> &operator=(miniunique_ptr<U> &&rp)
     {
         if (this->pointer != rp.pointer)
         {
@@ -55,4 +64,6 @@ public:
 
 private:
     T *pointer;
+
+
 };
