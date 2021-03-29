@@ -56,8 +56,10 @@ public:
     {
         if (p != pointer)
         {
-            delete pointer;
+            _release();
             pointer = p;
+            count_ptr = new counter();
+            count_ptr->shared_count = 1;
         }
     }
 
