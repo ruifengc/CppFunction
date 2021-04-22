@@ -14,8 +14,8 @@ int strlen(const char *p){
     }
     return n;
 }
-
-void strcpy(char *dest,char *src){
+// x86是小端有限，低地址存储低位数据，所以字符串是从低位到高位存储的
+void strcpy(char *dest,const char *src){
     // 难点：判断各种异常情况
     assert(dest&&src);
     // 这里如果是string创建的话 就不会出现dest根src 复制存在交集的情况吧
@@ -26,13 +26,14 @@ void strcpy(char *dest,char *src){
     }
     else{
         int n = strlen(src);
+        // 这里是拷贝0了的
         while(n>=0){
             *(dest+n) = *(src+n);
             n--;
         }
     }
 }
-void *memcpy(void *memTo,void *memFrom,int size){
+void memcpy(void *memTo,void *memFrom,int size){
     assert(memTo&&memFrom);
     if(memTo == memFrom) return;
     char *tmpTo = reinterpret_cast<char *>(memTo);
@@ -51,5 +52,5 @@ void *memcpy(void *memTo,void *memFrom,int size){
 }
 
 int main(){
-
+    return 0;
 }
