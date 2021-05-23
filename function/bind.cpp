@@ -18,8 +18,8 @@ struct Foo {
 
 // 这里的placeholders的位置是等待填入参数的位置，所以要从1开始填写
 int main(){
-    // 将某个参数进行了绑定
-    function<int(int)> func = bind(add,placeholders::_1,2);
+    // 将某个参数进行了绑定,普通方法可以加&也可以不加
+    function<int(int)> func = bind(&add,placeholders::_1,2);
     cout<<func(12)<<endl;
 
     // 绑定成员函数
